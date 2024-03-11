@@ -70,6 +70,7 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
     }
 }
  
+
 async function myFetch() {
     try {
         const response = await fetch("https://handlers.education.launchcode.org/static/planets.json");
