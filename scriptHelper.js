@@ -3,19 +3,19 @@
 require('cross-fetch/polyfill');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
-    // Here is the HTML formatting for our mission target div.
-    /*
-                 <h2>Mission Destination</h2>
-                 <ol>
-                     <li>Name: </li>
-                     <li>Diameter: </li>
-                     <li>Star: ${star}</li>
-                     <li>Distance from Earth: </li>
-                     <li>Number of Moons: </li>
-                 </ol>
-                 <img src="">
-    */
- }
+        const div = document.getElementById("missionTarget");
+        div.innerHTML = `
+          <h2>Mission Destination</h2>
+          <ol>
+            <li>Name: ${name}</li>
+            <li>Diameter: ${diameter}</li>
+            <li>Star: ${star}</li>
+            <li>Distance from Earth: ${distance}</li>
+            <li>Number of Moons: ${moons}</li>
+          </ol>
+          <img src="${imageUrl}"> 
+          `;
+     }
  
  function validateInput(testInput) {
     if(testInput === '') {
@@ -29,63 +29,67 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
  
  
  function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-    let pilotStatus = document.getElementById('pilotStatus');
-    let copilotStatus = document.getElementById('copilotStatus');
-    let fuelStatus = document.getElementById('fuelStatus');
-    let cargoStatus = document.getElementById('cargoStatus');
-    let launchStatus = document.getElementById('launchStatus');
-    list.style.visibility = 'visible';
-    if (validateInput(pilot.value) !== 'Is a Number' || validateInput(copilot.value) !== 'Is a Number') {
-        alert("Enter valid inputs");
-        return;
-    } else {
-        pilotStatus.innerHTML = `Pilot ${pilot.value} is ready for launch`;
-        copilotStatus.innerHTML = `Co-pilot ${copilot.value} is ready for launch`;
-    }
+   
+    let pilotStatus = document.getElementById("pilotStatus");
+    let copilotStatus = document.getElementById("copilotStatus");
+    let fuelStatus = document.getElementById("fuelStatus");
+    let cargoStatus = document.getElementById("cargoStatus");
+    let launchStatus = document.getElementById("launchStatus");
+    let faultyItems = document.getElementById('faultyItems');
 
-    if (validateInput(fuelLevel.value) === 'Is a Number') {
-        if (Number(fuelLevel.value) < 10000) {
-            list.style.visibility = 'visible';
-            launchStatus.style.color = 'red';
-            launchStatus.innerHTML = 'Shuttle Not Ready for Launch';
-            fuelStatus.innerHTML = 'Fuel level too low for launch';
-        } else {
-            fuelStatus.innerHTML = 'Fuel level high enough for launch';
-        }
-    }
+    // list.style.visibility = 'visible';
 
-    if (validateInput(cargoLevel.value) === 'Is a Number') {
-        if (Number(cargoLevel.value) > 10000) {
-            list.style.visibility = 'visible';
-            launchStatus.style.color = 'red';
-            launchStatus.innerHTML = 'Shuttle Not Ready for Launch';
-            cargoStatus.innerHTML = 'Cargo mass too heavy for launch';
-        } else {
-            cargoStatus.innerHTML = 'Cargo mass low enough for launch';
+
+    function formSubmission(document, pilotName, copilotName, fuelLevel, cargoMass) {
+        // Validate input
+        // const pilotValidation = validateInput(pilotName);
+        // const copilotValidation = validateInput(copilotName);
+        // const fuelValidation = validateInput(fuelLevel);
+        // const cargoValidation = validateInput(cargoMass);
+    
+        // Update shuttle requirements
+        const faultyItems = document.getElementById('faultyItems');
+        const launchStatus = document.getElementById('launchStatus');
+    
+        if (pilotValidation === "Empty" || copilotValidation === "Empty" || fuelValidation === "Empty" || cargoValidation === "Empty") {
+            alert("All fields are required.");
+            return;
         }
+    
+        if (fuelValidation === "Is a Number" && parseInt(fuelLevel) < 10000) {
+            faultyItems.style.visibility = 'visible';
+            faultyItems.innerHTML = `<li id="fuelStatus">Fuel level too low for launch</li>`;
+            launchStatus.textContent = "Shuttle not ready for launch";
+            launchStatus.style.color = "red";
+            return;
+        }
+    
+        if (cargoValidation === "Is a Number" && parseInt(cargoMass) > 10000) {
+            faultyItems.style.visibility = 'visible';
+            faultyItems.innerHTML += `<li id="cargoStatus">Cargo mass exceeds limit</li>`;
+            launchStatus.textContent = "Shuttle not ready for launch";
+            launchStatus.style.color = "red";
+            return;
+        }
+    
+        // If everything is valid, shuttle is ready for launch
+        launchStatus.textContent = "Shuttle is ready for launch";
+        launchStatus.style.color = "green";
     }
-    if (Number(fuelLevel.value) >= 10000 && Number(cargoLevel.value) <= 10000) {
-        launchStatus.innerHTML = 'Shuttle is Ready for Launch';
-        launchStatus.style.color = 'green';
-    }
-}
- 
+    ; }
 
 async function myFetch() {
-    try {
-        const response = await fetch("https://handlers.education.launchcode.org/static/planets.json");
-        const planetsData = await response.json();
-        return planetsData;
-    } catch (error) {
-        console.log("Error fetching planets data:", error);
-        return [];
-    }
-}
+    let planetsReturned;
+    planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
+      return response.json();  
+    });
+    return planetsReturned;
+  }
 
-function pickPlanet(planets) {
-    const randomIndex = Math.floor(Math.random() * planets.length);
-    return planets[randomIndex];
-}
+
+  function pickPlanet(planets) {
+    return planets[Math.floor(Math.random()*planets.length)];
+ }
     // let planet = {};
     // // get random number and get planet that in 
     

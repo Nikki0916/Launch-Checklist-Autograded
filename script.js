@@ -1,6 +1,6 @@
 // Write your JavaScript code here!
 
-const { formSubmission, myFetch } = require("./scriptHelper");
+// const { formSubmission, myFetch } = require("./scriptHelper");
 
 window.addEventListener("load", function() {
 
@@ -17,8 +17,10 @@ window.addEventListener("load", function() {
     let planet = pickPlanet(listedPlanets);
       addDestinationInfo(document, planet.name, planet.diameter, planet.star, planet.distance, planet.moons, planet.image);
     });
+});
 
   // add event listener for button then need to grab four inputs and pass those inputs into formSubmission within the event listener
+  window.onload = function() {
   const button = document.getElementById("formSubmit");
 
   button.addEventListener("click", function(event) {
@@ -31,4 +33,4 @@ window.addEventListener("load", function() {
     formSubmission(document, list, pilot.value, copilot.value, fuelLevel.value, cargoMass.value);
     event.preventDefault();
   }); 
- });
+ };
