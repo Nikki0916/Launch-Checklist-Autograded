@@ -28,8 +28,7 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
  };
  
  
- function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-   
+ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
     let pilotStatus = document.getElementById("pilotStatus");
     let copilotStatus = document.getElementById("copilotStatus");
     let fuelStatus = document.getElementById("fuelStatus");
@@ -37,46 +36,52 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
     let launchStatus = document.getElementById("launchStatus");
     let faultyItems = document.getElementById('faultyItems');
 
-    // list.style.visibility = 'visible';
+    list.style.visibility = 'visible';
 
-
-    function formSubmission(document, pilotName, copilotName, fuelLevel, cargoMass) {
-        // Validate input
-        // const pilotValidation = validateInput(pilotName);
-        // const copilotValidation = validateInput(copilotName);
-        // const fuelValidation = validateInput(fuelLevel);
-        // const cargoValidation = validateInput(cargoMass);
-    
-        // Update shuttle requirements
-        const faultyItems = document.getElementById('faultyItems');
-        const launchStatus = document.getElementById('launchStatus');
-    
-        if (pilotValidation === "Empty" || copilotValidation === "Empty" || fuelValidation === "Empty" || cargoValidation === "Empty") {
-            alert("All fields are required.");
-            return;
-        }
-    
-        if (fuelValidation === "Is a Number" && parseInt(fuelLevel) < 10000) {
-            faultyItems.style.visibility = 'visible';
-            faultyItems.innerHTML = `<li id="fuelStatus">Fuel level too low for launch</li>`;
-            launchStatus.textContent = "Shuttle not ready for launch";
-            launchStatus.style.color = "red";
-            return;
-        }
-    
-        if (cargoValidation === "Is a Number" && parseInt(cargoMass) > 10000) {
-            faultyItems.style.visibility = 'visible';
-            faultyItems.innerHTML += `<li id="cargoStatus">Cargo mass exceeds limit</li>`;
-            launchStatus.textContent = "Shuttle not ready for launch";
-            launchStatus.style.color = "red";
-            return;
-        }
-    
-        // If everything is valid, shuttle is ready for launch
-        launchStatus.textContent = "Shuttle is ready for launch";
-        launchStatus.style.color = "green";
+    // Validate input
+    if (pilot === '' || copilot === '' || fuelLevel === '' || cargoMass === '') {
+        alert("All fields are required.");
+        return;
     }
-    ; }
+
+    // Update shuttle requirements
+    if (isNaN(fuelLevel) || isNaN(cargoMass)) {
+        alert("Fuel level and cargo mass must be numbers.");
+        return;
+    }
+
+    fuelLevel = Number(fuelLevel);
+    cargoMass = Number(cargoMass);
+
+    if (fuelLevel < 10000) {
+        faultyItems.style.visibility = "visible";
+        fuelStatus.innerHTML = "Fuel level too low for launch";
+        launchStatus.innerHTML = "Shuttle Not Ready for Launch";
+        launchStatus.style.color = 'red';
+    } else {
+        fuelStatus.innerHTML = "Fuel level high enough for launch";
+    }
+
+    if (cargoMass > 10000) {
+        faultyItems.style.visibility = "visible";
+        cargoStatus.innerHTML = "Cargo mass too heavy for launch";
+        launchStatus.innerHTML = "Shuttle Not Ready for Launch";
+        launchStatus.style.color = 'red';
+    } else {
+        cargoStatus.innerHTML = "Cargo mass low enough for launch";
+    }
+
+    // Final check for both fuel and cargo
+    if (fuelLevel >= 10000 && cargoMass <= 10000) {
+        launchStatus.innerHTML = "Shuttle is Ready for Launch";
+        launchStatus.style.color = 'green';
+    }
+
+        // If everything is valid, shuttle is ready for launch
+        launchStatus.textContent = "Shuttle is Ready for launch";
+        launchStatus.style.color = 'green';
+}
+    
 
 async function myFetch() {
     let planetsReturned;
@@ -90,10 +95,7 @@ async function myFetch() {
   function pickPlanet(planets) {
     return planets[Math.floor(Math.random()*planets.length)];
  }
-    // let planet = {};
-    // // get random number and get planet that in 
     
-    // return planet
  
  
  module.exports.addDestinationInfo = addDestinationInfo;
