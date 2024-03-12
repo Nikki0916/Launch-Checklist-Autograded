@@ -50,6 +50,9 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
         return;
     }
 
+    pilotStatus.innerHTML = `Pilot ${pilot} is ready for launch`;
+    copilotStatus.innerHTML = `Co-pilot ${copilot} is ready for launch`;
+
     fuelLevel = Number(fuelLevel);
     cargoMass = Number(cargoMass);
 
@@ -77,9 +80,7 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
         launchStatus.style.color = 'green';
     }
 
-        // If everything is valid, shuttle is ready for launch
-        launchStatus.textContent = "Shuttle is Ready for launch";
-        launchStatus.style.color = 'green';
+
 }
     
 

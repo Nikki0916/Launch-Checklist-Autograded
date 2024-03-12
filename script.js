@@ -20,7 +20,7 @@ window.addEventListener("load", function() {
 });
 
   // add event listener for button then need to grab four inputs and pass those inputs into formSubmission within the event listener
-  window.onload = function() {
+//   window.onload = function() {
   const button = document.getElementById("formSubmit");
 
   button.addEventListener("click", function(event) {
@@ -33,4 +33,4 @@ window.addEventListener("load", function() {
     formSubmission(document, list, pilot.value, copilot.value, fuelLevel.value, cargoMass.value);
     event.preventDefault();
   }); 
- };
+//  };
